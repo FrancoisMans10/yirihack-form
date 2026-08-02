@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { User, MapPin, Mail, Video, CheckCircle2, X, Loader2, ArrowRight, Sparkles } from "lucide-react";
+import {
+  User,
+  MapPin,
+  Mail,
+  Video,
+  CheckCircle2,
+  X,
+  Loader2,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 // Place le fichier du logo dans src/assets/ (ex: src/assets/yirihack-logo.png)
 // puis ajuste le chemin d'import ci-dessous si besoin.
 import yiriHackLogo from "./assets/yirihack-logo.png";
 
-// ⚠️ À CONFIGURER : remplace cette URL par ton propre endpoint Formspree.
+// ⚠️ À CONFIGURER : ton endpoint Formspree (Dashboard → ton formulaire → URL).
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeeybpwy";
 
 /**
@@ -12,22 +22,15 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeeybpwy";
  * -----------------------------------------------------------------------
  * Palette imposée par la charte (issue du logo) :
  *  - Bleu Cyan / Royal (mot "HACK", focus, boutons) : #005A9C
- *  - Noir pur (mot "YIRI", titres)                 : #000000
+ *  - Noir pur (mot "YIRI", titres)                   : #000000
  *  - Vert feuillage (accent, succès)                 : #2E7D32
- *  - Fond de page                                    : #F8FAFC
- *  - Fond de carte                                   : #FFFFFF
+ *  - Fond de page                                     : #F8FAFC
+ *  - Fond de carte                                    : #FFFFFF
  *
- * Polices : Montserrat (titres, épaisse/géométrique) + Inter (champs), via Google Fonts.
+ * Polices : Montserrat (titres) + Inter (champs), via Google Fonts.
  */
 
-const initialForm = {
-  prenom: "",
-  nom: "",
-  ville: "",
-  email: "",
-  pitch: "",
-};
-
+const initialForm = { prenom: "", nom: "", ville: "", email: "", pitch: "" };
 const initialTouched = {
   prenom: false,
   nom: false,
@@ -58,7 +61,7 @@ function validate(form) {
   return errors;
 }
 
-// Champ de formulaire réutilisable : icône, focus animé (bleu logo), message d'erreur
+// Champ de formulaire réutilisable : icône, focus animé, message d'erreur
 function FormField({
   id,
   label,
@@ -77,14 +80,17 @@ function FormField({
 
   return (
     <div className={full ? "sm:col-span-2" : ""}>
-      <label htmlFor={id} className="mb-2 block text-xs font-bold uppercase tracking-wider text-black/80">
+      <label
+        htmlFor={id}
+        className="mb-2 block text-xs font-bold uppercase tracking-wider text-black/70"
+      >
         {label} <span className="text-[#005A9C]">*</span>
       </label>
 
       <div className="group relative">
         <Icon
           className={`pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 transition-colors duration-200 ${
-            showError ? "text-red-400" : "text-black/40 group-focus-within:text-[#005A9C]"
+            showError ? "text-red-400" : "text-black/35 group-focus-within:text-[#005A9C]"
           }`}
           strokeWidth={2}
         />
@@ -96,13 +102,13 @@ function FormField({
           onChange={onChange}
           onBlur={onBlur}
           placeholder={placeholder}
-          className={`w-full rounded-2xl border bg-[#F8FAFC]/50 py-3.5 pl-12 pr-4 text-[15px] text-gray-900 placeholder:text-gray-400
+          className={`w-full rounded-2xl border bg-[#F8FAFC] py-3.5 pl-12 pr-4 text-[15px] text-gray-900 placeholder:text-gray-400
             outline-none transition-all duration-300 ease-out
-            focus:bg-white focus:ring-4 focus:ring-[#005A9C]/10
+            focus:bg-white focus:shadow-[0_4px_16px_-4px_rgba(0,90,156,0.15)] focus:ring-4 focus:ring-[#005A9C]/10
             ${
               showError
                 ? "border-red-300 focus:border-red-400"
-                : "border-gray-200/80 hover:border-gray-300 focus:border-[#005A9C]"
+                : "border-gray-200 hover:border-gray-300 focus:border-[#005A9C]"
             }`}
         />
       </div>
@@ -159,14 +165,10 @@ export default function YiriHackCandidatureV2() {
       if (response.ok) {
         setSuccess(true);
       } else {
-        setSubmitError(
-          "L'envoi a échoué. Vérifie ta connexion et réessaie dans un instant."
-        );
+        setSubmitError("L'envoi a échoué. Vérifie ta connexion et réessaie dans un instant.");
       }
     } catch (err) {
-      setSubmitError(
-        "Impossible de contacter le serveur. Vérifie ta connexion internet."
-      );
+      setSubmitError("Impossible de contacter le serveur. Vérifie ta connexion internet.");
     } finally {
       setSubmitting(false);
     }
@@ -186,22 +188,29 @@ export default function YiriHackCandidatureV2() {
         .font-display { font-family: 'Montserrat', sans-serif; }
         .font-body { font-family: 'Inter', sans-serif; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+        /* Texture de fond très légère, discrète, pour éviter un aplat trop plat */
+        .bg-dot-grid {
+          background-image: radial-gradient(circle, rgba(0,90,156,0.06) 1px, transparent 1px);
+          background-size: 22px 22px;
+        }
       `}</style>
 
-      <div className="font-body mx-auto w-full max-w-2xl">
+      <div className="font-body relative mx-auto w-full max-w-2xl">
+        {/* Texture discrète en fond de page */}
+        <div className="bg-dot-grid pointer-events-none absolute -inset-x-10 -top-10 h-56 opacity-70" />
+
         {/* ---------- Carte principale ---------- */}
-        <div className="overflow-hidden rounded-3xl bg-white shadow-[0_20px_50px_-15px_rgba(0,90,156,0.08)] transition-all duration-300 hover:shadow-[0_25px_60px_-15px_rgba(0,90,156,0.12)]">
-          
-          {/* Liseré tricolore dynamique en haut de la carte */}
-          <div className="h-2 w-full bg-gradient-to-r from-black via-[#005A9C] to-[#2E7D32]" />
+        <div className="relative overflow-hidden rounded-3xl bg-white shadow-[0_20px_50px_-15px_rgba(0,90,156,0.12)] ring-1 ring-black/[0.03] transition-shadow duration-300 hover:shadow-[0_25px_60px_-15px_rgba(0,90,156,0.16)]">
+          {/* Liseré tricolore en haut de la carte */}
+          <div className="h-1.5 w-full bg-gradient-to-r from-black via-[#005A9C] to-[#2E7D32]" />
 
           {/* ---------- En-tête ---------- */}
-          <div className="relative border-b border-gray-100 bg-white px-6 pb-8 pt-10 sm:px-12 sm:pt-12">
+          <div className="relative border-b border-gray-100 bg-white px-6 pb-9 pt-10 sm:px-12 sm:pt-12">
             <div className="flex flex-col items-center text-center">
-              
-              {/* Logo horizontal mis en valeur dans une capsule douce avec un effet de lueur */}
+              {/* Logo dans une capsule douce avec halo tricolore au survol */}
               <div className="group relative mb-6">
-                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#005A9C]/20 via-[#2E7D32]/20 to-black/10 opacity-70 blur-md transition duration-300 group-hover:opacity-100"></div>
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#005A9C]/25 via-black/5 to-[#2E7D32]/25 opacity-60 blur-md transition duration-300 group-hover:opacity-100" />
                 <div className="relative flex h-20 w-40 items-center justify-center rounded-2xl border border-gray-100 bg-white px-3 py-2 shadow-sm">
                   <img
                     src={yiriHackLogo}
@@ -211,16 +220,24 @@ export default function YiriHackCandidatureV2() {
                 </div>
               </div>
 
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#005A9C]/8 px-4 py-1.5 text-xs font-bold tracking-wide text-[#005A9C] mb-3">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#005A9C]/8 px-4 py-1.5 text-xs font-bold tracking-wide text-[#005A9C]">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>1ère Édition • Yiri Tech Africa</span>
+                <span>1ère Édition · Yiri Tech Africa</span>
               </div>
 
-              <h1 className="font-display text-2xl font-extrabold text-black sm:text-3xl">
+              <h1 className="font-display text-[28px] font-extrabold leading-tight text-black sm:text-4xl">
                 Candidature <span className="text-black">YIRI</span>
                 <span className="text-[#005A9C]">HACK</span>
               </h1>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-500 sm:text-[15px]">
+
+              {/* Petit accent décoratif sous le titre, aux 3 couleurs de la charte */}
+              <div className="mt-4 flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-black" />
+                <span className="h-1.5 w-6 rounded-full bg-[#005A9C]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#2E7D32]" />
+              </div>
+
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-gray-500 sm:text-[15px]">
                 Rejoignez la révolution technologique africaine. Renseignez vos
                 informations pour inscrire votre projet.
               </p>
@@ -301,10 +318,10 @@ export default function YiriHackCandidatureV2() {
               type="submit"
               disabled={submitting}
               className="group relative mt-10 flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-[#005A9C] px-6 py-4 text-[15px] font-bold text-white
-                shadow-[0_10px_25px_-5px_rgba(0,90,156,0.3)] transition-all duration-300 ease-out
-                hover:bg-black hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.4)]
+                shadow-[0_10px_25px_-5px_rgba(0,90,156,0.35)] transition-all duration-300 ease-out
+                hover:bg-black hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.4)] active:scale-[0.99]
                 focus:outline-none focus:ring-4 focus:ring-[#005A9C]/25
-                disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-[#005A9C]"
+                disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-[#005A9C] disabled:active:scale-100"
             >
               {submitting ? (
                 <>
@@ -320,7 +337,7 @@ export default function YiriHackCandidatureV2() {
             </button>
 
             {submitError && (
-              <div className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-600 border border-red-100">
+              <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-600">
                 {submitError}
               </div>
             )}
@@ -332,7 +349,7 @@ export default function YiriHackCandidatureV2() {
           </form>
         </div>
 
-        <p className="mt-8 text-center text-xs text-gray-400 font-medium">
+        <p className="mt-8 text-center text-xs font-medium text-gray-400">
           © {new Date().getFullYear()} Yiri Tech Africa — YiriHack, 1ère Édition
         </p>
       </div>
@@ -357,7 +374,10 @@ export default function YiriHackCandidatureV2() {
               <X className="h-4 w-4" />
             </button>
 
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#2E7D32]/10">
+            <div
+              className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#2E7D32]/10"
+              style={{ animation: "popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both" }}
+            >
               <CheckCircle2 className="h-9 w-9 text-[#2E7D32]" strokeWidth={2.5} />
             </div>
 
@@ -365,13 +385,14 @@ export default function YiriHackCandidatureV2() {
               Candidature envoyée !
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-gray-500">
-              Merci <span className="font-semibold text-black">{form.prenom}</span>, votre candidature a bien été reçue. 
-              L'équipe YiriHack reviendra vers vous très prochainement.
+              Merci <span className="font-semibold text-black">{form.prenom}</span>, votre
+              candidature a bien été reçue. L'équipe YiriHack reviendra vers vous très
+              prochainement.
             </p>
 
             <button
               onClick={resetForm}
-              className="mt-8 w-full rounded-2xl bg-[#005A9C] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#005A9C]/25 transition-all duration-300 hover:bg-black"
+              className="mt-8 w-full rounded-2xl bg-[#005A9C] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#005A9C]/25 transition-all duration-300 hover:bg-black active:scale-[0.99]"
             >
               Envoyer une autre candidature
             </button>
